@@ -7,21 +7,34 @@ on:
     pull_request: # Event: Whenever a pull request is made to the repositry
         branches:
             - master
+        types:
+            - closed
+    workflow_dispatch:
                         
          
 jobs:
-    on-push:
-        if: github.event == 'push'
+    on-push: # Job 1
+        if: github.event_name == 'push'
         runs-on: ubuntu-latest
         steps: # Steps to be executed in the job
             - name: "Running on master push" #step1
               run: echo "Running on master branch"
-    on-pull-request: #Job name
+    
+    on-pull-request: #Job 2
+        if: github.event_name == 'pull_request'  
         runs-on: ubuntu-latest
         steps: # Steps to be executed in the job
             - name: "Running on pull request" #step1
               run: echo "Running on pull request"
-    on-workflow-dispatch: #Job 
+
+    on-pull-request-closed: # Job 3
+        if: github.event_name == 'pull_request' && github.event.action == 'closed'
+        runs-on: ubuntu-latest
+        steps: # Steps to be executed in the job
+            - name: "Running on pull request closed" 
+              run: echo "Running on pull request closed"
+
+    on-workflow-dispatch: #Job 4
         if: github.event == 'workflow_dispatch'
         runs-on: ubuntu-latest
         steps: # Steps to be executed in the job
